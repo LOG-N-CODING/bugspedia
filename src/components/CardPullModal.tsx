@@ -70,10 +70,10 @@ const CardPullModal: React.FC<CardPullModalProps> = ({
   // Inside your CardPullModal component:
   const handlePullCard = async () => {
     if (!user) return;
-    // if (userPoints < CARD_POINTS_AMOUNT) {
-    //   setError("You don’t have enough points to pull a card.");
-    //   return;
-    // }
+    if (userPoints < CARD_POINTS_AMOUNT) {
+      setError("You don’t have enough points to pull a card.");
+      return;
+    }
 
     setLoading(true);
     setError(null);
