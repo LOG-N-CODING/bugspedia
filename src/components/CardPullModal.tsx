@@ -9,7 +9,9 @@ import {
   Fade,
   Modal,
   Typography,
+  IconButton,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import {
   arrayUnion,
   collection,
@@ -68,10 +70,10 @@ const CardPullModal: React.FC<CardPullModalProps> = ({
   // Inside your CardPullModal component:
   const handlePullCard = async () => {
     if (!user) return;
-    if (userPoints < CARD_POINTS_AMOUNT) {
-      setError("You don’t have enough points to pull a card.");
-      return;
-    }
+    // if (userPoints < CARD_POINTS_AMOUNT) {
+    //   setError("You don’t have enough points to pull a card.");
+    //   return;
+    // }
 
     setLoading(true);
     setError(null);
@@ -105,33 +107,64 @@ const CardPullModal: React.FC<CardPullModalProps> = ({
       fetchUserPoints();
       setPulledCard(null);
       setError(null);
+      // body 스크롤 허용
+      document.body.style.overflow = "auto";
     }
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [open]);
 
   return (
-    <Modal open={open} onClose={onClose} closeAfterTransition>
+    <Modal
+      open={open}
+      onClose={onClose}
+      closeAfterTransition
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        overflowY: 'auto',
+        maxHeight: '100vh',
+      }}
+    >
       <Fade in={open}>
         <Box
           sx={{
+            margin: '5% auto 1%',
+            width: '90vw',
             maxWidth: 400,
             bgcolor: "background.paper",
             p: 4,
             mx: "auto",
-            mt: 30,
             borderRadius: 3,
             boxShadow: 6,
             textAlign: "center",
-            minHeight: 300,
+            minHeight: 200,
+            maxHeight: '80%',
+            overflowY: 'auto',
             display: "flex",
             flexDirection: "column",
+            zIndex: 1301,
+            position: 'relative',
           }}
         >
+          {/* 닫기(X) 버튼 */}
+          <IconButton
+            aria-label="close"
+            onClick={onClose}
+            sx={{
+              position: "absolute",
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+              zIndex: 2,
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
           <Typography variant="h5" mb={2} mt={4}>
-            🎴 Pull a Random Insect Card
-          </Typography>
-
-          <Typography variant="subtitle1" mb={2}>
-            You have <strong>{userPoints}</strong> points.
+            📇 Pull a Random Insect Card
           </Typography>
 
           {loading ? (

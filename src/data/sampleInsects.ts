@@ -4,8 +4,7 @@ export const sampleInsects: InsectCardData[] = [
   {
     id: "insect001",
     name: "Stag Beetle",
-    image:
-      "https://www.planetnatural.com/wp-content/uploads/2023/12/Stag-Beetle.jpg",
+    image: "/insects/imgi_2_Stag-Beetle.jpg",
     habitat: "Deciduous forests and woodlands",
     behavior: "Nocturnal, males use mandibles in territorial fights",
     description:
@@ -15,8 +14,7 @@ export const sampleInsects: InsectCardData[] = [
   {
     id: "insect002",
     name: "Argentine Ant",
-    image:
-      "https://files.aptuitivcdn.com/Pqnz49oyx5-1775/images/argentine-ant-identification.jpg",
+    image: "/insects/imgi_3_argentine-ant-identification.jpg",
     habitat: "Urban areas, gardens, and forests",
     behavior: "Highly social, forms large colonies and aggressive trails",
     description:
@@ -26,10 +24,10 @@ export const sampleInsects: InsectCardData[] = [
   {
     id: "insect003",
     name: "Brown-lipped Snail",
-    image: "",
+    image: "/insects/imgi_4_images.jpg",
     habitat: "Gardens, woodlands, and grasslands",
     behavior:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBkregW_lRsu6O2T4k8CUtX78RK4amQec6Og&s",
+      "Herbivorous, feeds on decaying plant matter and fungi",
     description:
       "Brown-lipped snails are small mollusks with coiled shells, thriving in moist environments.",
     rarity: "common",
@@ -461,7 +459,7 @@ export const sampleInsects: InsectCardData[] = [
     id: "insect042",
     name: "Great Yellow Bumblebee",
     image:
-      "https://dimensionnails.com/cdn/shop/files/GreatYellowBumbleBee_f8ad2a6c-2d04-45fa-920e-8e3628a17a56.jpg?v=1743795889&width=720",
+      "https://speciesontheedge.co.uk/wp-content/uploads/2025/06/GYBB-D-Wood-5-edited.jpg",
     habitat: "Coastal grasslands and machair",
     behavior: "Pollinates wildflowers, nests in burrows",
     description:
@@ -505,7 +503,7 @@ export const sampleInsects: InsectCardData[] = [
     id: "insect046",
     name: "Glow Worm",
     image:
-      "https://i.natgeofe.com/n/8f3fa76b-3947-4https1d8-8325-a77ffe832e58/glowworm.jpg",
+      "https://nt.global.ssl.fastly.net/binaries/content/gallery/website/national/regions/norfolk/places/sheringham-park/library/summer/glowing-female-glow-worm-sheringham-park-norfolk.jpg",
     habitat: "Grasslands and woodlands",
     behavior: "Females glow to attract males",
     description:
@@ -527,7 +525,7 @@ export const sampleInsects: InsectCardData[] = [
   {
     id: "insect048",
     name: "Common Red Soldier Beetle",
-    image: "https://example.com/images/red_soldier_beetle.jpg",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTE4YTqQurhInObOIwVzdMYXnrcb0nLuzZPSQ&s",
     habitat: "Meadows and gardens",
     behavior: "Predatory, feeds on smaller insects",
     description:

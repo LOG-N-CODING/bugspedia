@@ -3,7 +3,7 @@ export interface InsectCardData {
   name: string;
   image: string;
   habitat: string;
-behavior: string;
+  behavior: string;
   description: string;
   rarity?: "common" | "rare" | "epic" | "legendary"; // optional enhancement
   seasonal?: boolean;

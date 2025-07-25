@@ -41,6 +41,7 @@ const QuizStart: React.FC = () => {
             >
               🧠 Insect Quiz
             </Typography>
+            
           </motion.div>
 
           <Typography
@@ -50,6 +51,10 @@ const QuizStart: React.FC = () => {
             sx={{ mb: 4, fontWeight: 500 }}
           >
             Answer {QUIZ_QUESTIONS} questions to earn a point and unlock a card!
+          </Typography>
+
+          <Typography mb={4} border={1} borderColor="success.light" p={2} borderRadius={2} color={"green"}>
+            You answered questions correctly on the first try!
           </Typography>
 
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>

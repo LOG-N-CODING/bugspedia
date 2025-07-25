@@ -1,6 +1,7 @@
-import { Box, Tooltip, Typography } from "@mui/material";
+import { Box, Tooltip, Typography, IconButton } from "@mui/material";
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+
 
 interface CardData {
   name: string;
@@ -11,6 +12,7 @@ interface CardData {
 interface CardCarouselProps {
   cards: CardData[];
   onCardClick?: (card: CardData) => void;
+  onDeleteCard?: (card: CardData) => void;
   compact?: boolean;
 }
 
@@ -18,6 +20,7 @@ const CardCarousel = ({
   cards,
   compact = false,
   onCardClick,
+  onDeleteCard,
 }: CardCarouselProps) => {
   const [flippedCard, setFlippedCard] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -40,9 +43,21 @@ const CardCarousel = ({
       ref={containerRef}
       sx={{
         width: "100%",
-        overflow: "hidden", // Hide overflow to enable drag reveal
+        overflowX: "auto", // 스크롤바 표시
+        overflowY: "hidden",
         position: "relative",
         py: 2,
+        "&::-webkit-scrollbar": {
+          height: 8,
+          background: "transparent",
+        },
+        "&::-webkit-scrollbar-thumb": {
+          background: "linear-gradient(to right,rgb(129, 172, 131),rgb(51, 108, 58))",
+          borderRadius: 4,
+        },
+        "&::-webkit-scrollbar-track": {
+          background: "transparent",
+        },
       }}
     >
       <motion.div
@@ -76,7 +91,7 @@ const CardCarousel = ({
                 perspective: 1000,
               }}
             >
-              {/* Front */}
+              
               <motion.div
                 style={{
                   position: "absolute",
@@ -87,6 +102,7 @@ const CardCarousel = ({
                 whileHover={{ scale: 1.05 }}
               >
                 <Tooltip title={card.name}>
+                  {/* Front */}
                   <Box
                     component="img"
                     src={card.image}
@@ -97,13 +113,15 @@ const CardCarousel = ({
                       borderRadius: 2,
                       objectFit: "cover",
                       boxShadow: 3,
+                      pointerEvents: "none",
+                      userSelect: "none",
                     }}
                   />
                 </Tooltip>
               </motion.div>
 
               {/* Back */}
-              <Box
+                <Box
                 sx={{
                   position: "absolute",
                   width: "100%",
@@ -116,19 +134,43 @@ const CardCarousel = ({
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
-                  justifyContent: "center",
-                  px: 1,
+                  justifyContent: compact ? "start" : "center",
                   boxShadow: 3,
                   textAlign: "center",
+                  overflow: "hidden",
                 }}
-              >
-                <Typography variant="caption" fontWeight="bold" gutterBottom>
+                >
+
+                {/* title */}
+                {compact && (
+                  <Typography variant="caption" fontWeight="bold" px={"1px"} pt={2} lineHeight={1.2} gutterBottom>
                   {card.name}
-                </Typography>
-                <Typography variant="caption" color="text.secondary">
+                  </Typography>
+                )}
+                {compact || (
+                  <Typography variant="caption" fontWeight="bold">
+                  {card.name}
+                  </Typography>
+                )}
+
+                {/* secondary */}
+                <Typography variant="caption" color="text.secondary" lineHeight={0.9} px={1} pb={1} maxHeight={compact ? "57px" : "50%"} overflow="hidden">
                   {card.description || "No description available."}
                 </Typography>
-              </Box>
+                {onDeleteCard && (
+                  <IconButton
+                  size="small"
+                  color="error"
+                  sx={{ mt: 1 }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onDeleteCard(card);
+                  }}
+                  >
+                  🗑️
+                  </IconButton>
+                )}
+                </Box>
             </motion.div>
           );
         })}

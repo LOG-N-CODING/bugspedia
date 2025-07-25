@@ -16,13 +16,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       style={{
         position: "relative",
         overflow: "hidden",
-        minHeight: "100vh",
-        paddingTop: "4rem",
-        paddingBottom: "4rem",
+        paddingTop: "1rem",
+        paddingBottom: "1rem",
+        // minHeight: "100vh",
       }}
     >
       {/* Background Layer */}
-      <div
+      {/* <div
         className="zoom-background"
         style={{
           background: `linear-gradient(to right, rgba(234, 240, 234, 0.66), rgb(200, 218, 195)), url('./bg.png')`,
@@ -38,7 +38,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           zIndex: -1,
           animation: "zoomInOut 10s ease-in-out infinite",
         }}
-      />
+      /> */}
       <Container maxWidth="md" sx={{ position: "relative", zIndex: 1 }}>
         {children}
       </Container>

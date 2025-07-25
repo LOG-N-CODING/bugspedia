@@ -12,8 +12,7 @@ const LoginAlert: React.FC = () => {
         display="flex"
         justifyContent="center"
         alignItems="center"
-        minHeight="100vh"
-        mt={-20}
+        // minHeight="100vh"
       >
         <Paper
           elevation={6}
@@ -28,13 +27,42 @@ const LoginAlert: React.FC = () => {
             p: 10,
           }}
         >
-          <Typography
+          {/* <Typography
             variant="h3"
             color="primary"
             gutterBottom
             sx={{ fontWeight: 700 }}
           >
-            🪲 Welcome to <span style={{ color: "#388e3c" }}>BugsPedia</span>!
+            <span>
+            <img
+              src="/bugs.png"
+              alt="Beetle"
+              style={{ height: 20, verticalAlign: "middle" }}
+            />
+          </span> Welcome to <span style={{ color: "#388e3c" }}>BugsPedia</span>!
+          </Typography> */}
+          {/* <Typography
+            variant="h4"
+            fontWeight={700}
+            color="success.main"
+            gutterBottom
+            sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 1 }}
+          >
+            <span><img src="/bugs.png" alt="Beetle" style={{ height: 40, verticalAlign: "middle" }} /></span>
+            <span>Welcome to bugsPedia</span>
+          </Typography> */}
+          <Typography
+            variant="h4"
+            fontWeight={700}
+            color="primary"
+            gutterBottom
+            sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2 }}
+          >
+            <img
+              src="/logo.png"
+              alt="Logo"
+              style={{ width: "100%" }}
+            />
           </Typography>
 
           <Typography variant="subtitle1" color="text.secondary" sx={{ mb: 4 }}>

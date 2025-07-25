@@ -2,6 +2,7 @@ import { AnimatePresence } from "framer-motion";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 import { ThemeProvider } from "@emotion/react";
+import FloatingEffectBackground from "./components/FloatingEffectBackground";
 import Navbar from "./components/Navbar";
 import { AuthProvider } from "./contexts/AuthContext";
 import Dashboard from "./pages/Dashboard";
@@ -16,6 +17,7 @@ import { theme } from "./theme";
 function App() {
   return (
     <ThemeProvider theme={theme}>
+      <FloatingEffectBackground />
       <Router>
         <AuthProvider>
           <Navbar />

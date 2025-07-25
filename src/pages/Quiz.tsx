@@ -13,6 +13,7 @@ import {
 import { doc, increment, updateDoc } from "firebase/firestore";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
+import Confetti from "react-confetti";
 import InsectCard from "../components/InsectCard";
 import LoginAlert from "../components/LoginAlet";
 import QuizComplete from "../components/QuizComplete";
@@ -122,225 +123,247 @@ const Quiz: React.FC = () => {
       </Layout>
     );
 
+  // 화면 크기 가져오기
+  const [windowSize, setWindowSize] = useState({ width: window.innerWidth, height: window.innerHeight });
+  useEffect(() => {
+    const handleResize = () => setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
-    <Layout>
-      <Container maxWidth="sm" sx={{ mt: 12, mb: 8, position: "relative" }}>
-        {/* Audio element - looped background music */}
-        <audio ref={audioRef} src="/quiz.mp3" loop preload="auto" />
+    <>
+      {showCard && (
+        <Confetti
+          width={windowSize.width}
+          height={windowSize.height}
+          numberOfPieces={150}
+          recycle={true}
+          gravity={0.25}
+          initialVelocityY={12}
+          
+        />
+      )}
+      <Layout>
+        
+        <Container maxWidth="sm" sx={{ mt: 12, mb: 8, position: "relative" }}>
+          {/* Audio element - looped background music */}
+          <audio ref={audioRef} src="/quiz.mp3" loop preload="auto" />
 
-        <Typography
-          variant="h4"
-          color="success.main"
-          align="center"
-          gutterBottom
-          mb={4}
-          sx={{ fontWeight: "bold" }}
-        >
-          🧠 Insect Quiz
-        </Typography>
-
-        {/* Progress Bar */}
-        <Box sx={{ mb: 3 }}>
-          <LinearProgress
-            variant="determinate"
-            value={((current + (showCard ? 1 : 0)) / QUIZ_QUESTIONS) * 100}
-            sx={{
-              height: 10,
-              borderRadius: 5,
-              bgcolor: "grey.300",
-              "& .MuiLinearProgress-bar": {
-                bgcolor: "success.main",
-              },
-            }}
-          />
           <Typography
-            variant="body2"
-            color="text.secondary"
+            variant="h4"
+            color="success.main"
             align="center"
-            mt={0.5}
+            gutterBottom
+            mb={4}
+            sx={{ fontWeight: "bold" }}
           >
-            Question {current + 1} / {QUIZ_QUESTIONS}
+            🧠 Insect Quiz
           </Typography>
-        </Box>
 
-        <AnimatePresence mode="wait">
-          {!showCard ? (
-            <motion.div
-              key={`question-${current}`}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.4 }}
+          {/* Progress Bar */}
+          <Box sx={{ mb: 3 }}>
+            <LinearProgress
+              variant="determinate"
+              value={((current + (showCard ? 1 : 0)) / QUIZ_QUESTIONS) * 100}
+              sx={{
+                height: 10,
+                borderRadius: 5,
+                bgcolor: "grey.300",
+                "& .MuiLinearProgress-bar": {
+                  bgcolor: "success.main",
+                },
+              }}
+            />
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              align="center"
+              mt={0.5}
             >
-              <Paper
-                elevation={6}
-                sx={{ p: 6, pb: 8, borderRadius: 3, userSelect: "none" }}
+              Question {current + 1} / {QUIZ_QUESTIONS}
+            </Typography>
+          </Box>
+
+          <AnimatePresence mode="wait">
+            {!showCard ? (
+              <motion.div
+                key={`question-${current}`}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.4 }}
               >
-                <Typography
-                  variant="h6"
-                  gutterBottom
-                  mb={4}
-                  sx={{ fontWeight: "600" }}
+                <Paper
+                  elevation={6}
+                  sx={{ p: 6, pb: 8, borderRadius: 3, userSelect: "none" }}
                 >
-                  {current + 1}. {question.question}
-                </Typography>
-                <Stack spacing={2}>
-                  {question.options.map((option) => {
-                    const isSelected = selected === option;
-                    const isCorrect = option === question.answer;
-                    return (
-                      <Button
-                        key={option}
-                        variant={
-                          isSelected
-                            ? isCorrect
-                              ? "contained"
-                              : "outlined"
-                            : "outlined"
-                        }
-                        color={
-                          isSelected
-                            ? isCorrect
-                              ? "success"
-                              : "error"
-                            : "success"
-                        }
-                        onClick={() => handleAnswer(option)}
-                        disabled={!!selected && !isWrong}
-                        sx={{
-                          textTransform: "none",
-                          fontWeight: "600",
-                          fontSize: "1.1rem",
-                          py: 1.5,
-                          borderWidth: 2,
-                          transition: "all 0.3s",
-                          "&:hover": {
-                            scale: 1.05,
-                            bgcolor: isSelected
+                  <Typography
+                    variant="h6"
+                    gutterBottom
+                    mb={4}
+                    sx={{ fontWeight: "600" }}
+                  >
+                    {current + 1}. {question.question}
+                  </Typography>
+                  <Stack spacing={2}>
+                    {question.options.map((option) => {
+                      const isSelected = selected === option;
+                      const isCorrect = option === question.answer;
+                      return (
+                        <Button
+                          key={option}
+                          variant={
+                            isSelected
                               ? isCorrect
-                                ? "success.dark"
-                                : "error.dark"
-                              : "success.light",
-                          },
-                        }}
-                      >
-                        {option}
-                      </Button>
-                    );
-                  })}
-                </Stack>
+                                ? "contained"
+                                : "outlined"
+                              : "outlined"
+                          }
+                          color={
+                            isSelected
+                              ? isCorrect
+                                ? "success"
+                                : "error"
+                              : "success"
+                          }
+                          onClick={() => handleAnswer(option)}
+                          disabled={!!selected && !isWrong}
+                          sx={{
+                            textTransform: "none",
+                            fontWeight: "600",
+                            fontSize: "1.1rem",
+                            py: 1.5,
+                            borderWidth: 2,
+                            transition: "all 0.3s",
+                            "&:hover": {
+                              scale: 1.05,
+                              bgcolor: isSelected
+                                ? isCorrect
+                                  ? "success.dark"
+                                  : "error.dark"
+                                : "success.light",
+                            },
+                          }}
+                        >
+                          {option}
+                        </Button>
+                      );
+                    })}
+                  </Stack>
 
-                <AnimatePresence>
-                  {isWrong && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 10 }}
-                      transition={{ duration: 0.4 }}
-                    >
-                      <Typography
-                        variant="subtitle1"
-                        color="error"
-                        mt={3}
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          fontWeight: "bold",
-                        }}
+                  <AnimatePresence>
+                    {isWrong && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        transition={{ duration: 0.4 }}
                       >
-                        <Box component="span" sx={{ mr: 1, fontSize: 20 }}>
-                          ✗
-                        </Box>
-                        Oops! That’s not quite right. Try again!
-                      </Typography>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </Paper>
-            </motion.div>
-          ) : (
-            <motion.div
-              key="reward"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              transition={{ duration: 0.5 }}
-            >
-              <Paper
-                elevation={6}
-                sx={{
-                  p: 4,
-                  borderRadius: 3,
-                  mt: 4,
-                  textAlign: "center",
-                  bgcolor: "background.paper",
-                  userSelect: "none",
-                }}
+                        <Typography
+                          variant="subtitle1"
+                          color="error"
+                          mt={3}
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          <Box component="span" sx={{ mr: 1, fontSize: 20 }}>
+                            ✗
+                          </Box>
+                          Oops! That’s not quite right. Try again!
+                        </Typography>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </Paper>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="reward"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.5 }}
               >
-                <Typography
-                  variant="h5"
-                  color="success.main"
-                  gutterBottom
-                  sx={{ fontWeight: "bold" }}
-                >
-                  ✅ Correct! You earned:
-                </Typography>
-
-                <Box my={3} display="flex" justifyContent="center">
-                  <InsectCard insect={question.reward} />
-                </Box>
-
-                <Button
-                  variant="contained"
-                  color="success"
-                  onClick={nextQuestion}
+                <Paper
+                  elevation={6}
                   sx={{
-                    mt: 2,
-                    px: 5,
-                    fontWeight: "bold",
-                    fontSize: "1.1rem",
-                    boxShadow: 4,
-                    "&:hover": { boxShadow: 6 },
+                    p: 4,
+                    borderRadius: 3,
+                    mt: 4,
+                    textAlign: "center",
+                    bgcolor: "background.paper",
+                    userSelect: "none",
                   }}
-                  autoFocus
                 >
-                  Next Question
-                </Button>
-              </Paper>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                  <Typography
+                    variant="h5"
+                    color="success.main"
+                    gutterBottom
+                    sx={{ fontWeight: "bold" }}
+                  >
+                    ✅ Correct! You earned:
+                  </Typography>
 
-        {/* Mute toggle below quiz */}
-        <Box
-          sx={{
-            mt: 4,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Tooltip title={isMuted ? "Unmute Music" : "Mute Music"}>
-            <IconButton
-              color="success"
-              onClick={toggleMute}
-              size="large"
-              aria-label="Toggle background music mute"
-            >
-              {isMuted ? (
-                <VolumeOff fontSize="inherit" />
-              ) : (
-                <VolumeUp fontSize="inherit" />
-              )}
-            </IconButton>
-          </Tooltip>
-          <Typography variant="body2" color="text.secondary" ml={1}>
-            {isMuted ? "Music Off" : "Music On"}
-          </Typography>
-        </Box>
-      </Container>
-    </Layout>
+                  <Box my={3} display="flex" justifyContent="center">
+                    <InsectCard insect={question.reward} />
+                  </Box>
+
+                  <Button
+                    variant="contained"
+                    color="success"
+                    onClick={nextQuestion}
+                    sx={{
+                      mt: 2,
+                      px: 5,
+                      fontWeight: "bold",
+                      fontSize: "1.1rem",
+                      boxShadow: 4,
+                      "&:hover": { boxShadow: 6 },
+                    }}
+                    autoFocus
+                  >
+                    Next Question
+                  </Button>
+                </Paper>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Mute toggle below quiz */}
+          <Box
+            sx={{
+              mt: 4,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Tooltip title={isMuted ? "Unmute Music" : "Mute Music"}>
+              <IconButton
+                color="success"
+                onClick={toggleMute}
+                size="large"
+                aria-label="Toggle background music mute"
+              >
+                {isMuted ? (
+                  <VolumeOff fontSize="inherit" />
+                ) : (
+                  <VolumeUp fontSize="inherit" />
+                )}
+              </IconButton>
+            </Tooltip>
+            <Typography variant="body2" color="text.secondary" ml={1}>
+              {isMuted ? "Music Off" : "Music On"}
+            </Typography>
+          </Box>
+        </Container>
+      </Layout>
+    </>
   );
 };
 

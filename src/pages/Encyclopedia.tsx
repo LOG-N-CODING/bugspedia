@@ -76,7 +76,7 @@ const Encyclopedia: React.FC = () => {
         </Typography>
       </Box>
 
-      <Grid container spacing={2} mb={4}>
+      <Grid container spacing={2} mb={4} justifyContent={"center"}>
         <Grid>
           <TextField
             sx={{ width: 400 }}
@@ -122,7 +122,7 @@ const Encyclopedia: React.FC = () => {
         </Typography>
       ) : (
         <>
-          <Grid container spacing={6}>
+          <Grid container spacing={6} justifyContent="center">
             {visibleInsects.map((insect) => (
               <Grid key={insect.id}>
                 <motion.div

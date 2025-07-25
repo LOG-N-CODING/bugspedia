@@ -34,7 +34,7 @@ const Navbar: React.FC = () => {
   };
 
   const menuLinks = [
-    { name: "Dashboard", path: "/" },
+    { name: "Main", path: "/" },
     { name: "Quiz", path: "/quiz" },
     { name: "Encyclopedia", path: "/encyclopedia" },
     { name: "Leaderboard", path: "/leaderboard" },
@@ -54,9 +54,23 @@ const Navbar: React.FC = () => {
           variant="h6"
           component={RouterLink}
           to="/"
-          sx={{ flexGrow: 1, textDecoration: "none", color: "inherit" }}
+          sx={{
+            flexGrow: 1,
+            textDecoration: "none",
+            color: "inherit",
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+          }}
         >
-          🪲 BugsPedia
+          <span>
+            <img
+              src="/bugs.png"
+              alt="Beetle"
+              style={{ height: 28, verticalAlign: "middle" }}
+            />
+          </span>
+          <span>BugsPedia</span>
         </Typography>
 
         <Box sx={{ display: { xs: "none", sm: "flex" }, gap: 2 }}>

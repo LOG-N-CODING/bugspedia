@@ -6,13 +6,13 @@ import CardCarousel from "../components/CardCarousel";
 import CardPullModal from "../components/CardPullModal";
 import LoginAlert from "../components/LoginAlet";
 import { useAuth } from "../contexts/AuthContext";
-import { useAllUsers, useUserCards } from "../hooks";
+import { deleteAllUserShowcaseCards, useAllUsers, useUserCards } from "../hooks";
 import Layout from "../Layout";
 
 const Dashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const userCards = useUserCards(user?.uid);
+  const [userCards, removeUserCard] = useUserCards(user?.uid);
   const allUsers = useAllUsers();
   const [modalOpen, setModalOpen] = useState(false);
   // const [userCollection, setUserCollection] = useState<InsectCardData[]>([]);
@@ -28,6 +28,8 @@ const Dashboard = () => {
   useEffect(() => {
     const currentUserData = allUsers.find((u) => u.uid === user?.uid);
     setLocalPoints(currentUserData?.points || 0);
+
+    deleteAllUserShowcaseCards();
   }, [allUsers, user]);
 
   const handleNewCard = () => {
@@ -47,7 +49,7 @@ const Dashboard = () => {
         sx={{
           display: "flex",
           flexDirection: "column",
-          minHeight: "90vh",
+          // minHeight: "90vh",
           bgcolor: "#f1f8e9",
           p: 4,
           pl: 6,
@@ -70,17 +72,25 @@ const Dashboard = () => {
                 fontWeight={700}
                 color="success.main"
                 gutterBottom
+                sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
               >
-                Welcome back, {user.displayName}! 🪲
+                <span>
+                  <img
+                    src="/bugs.png"
+                    alt="Beetle"
+                    style={{ height: 40, verticalAlign: "middle" }}
+                  />
+                </span>
+                <span>Welcome to bugsPedia</span>
               </Typography>
             </Box>
             <Typography variant="body1" color="text.secondary">
-              Let’s see how your insect collection is growing!
+              {user.displayName}님, 곤충 도감에 오신 것을 환영합니다!
             </Typography>
           </motion.div>
         </Box>
 
-        <Divider sx={{ my: 4 }} />
+        <Divider sx={{ my: 2 }} />
         {/* Points and Rank */}
         <Typography
           variant="h5"
@@ -118,7 +128,7 @@ const Dashboard = () => {
             </Box>
           </Typography>
         </Box>
-        <Divider sx={{ my: 4 }} />
+        <Divider sx={{ my: 2 }} />
 
         {/* Card Showcase */}
 
@@ -141,11 +151,12 @@ const Dashboard = () => {
             <CardCarousel
               cards={userCards}
               onCardClick={(card) => console.log(card)}
+              onDeleteCard={removeUserCard}
             />
           )}
         </Box>
 
-        <Divider sx={{ my: 4 }} />
+        <Divider sx={{ my: 2 }} />
 
         {/* Card Showcase */}
         {/* Actions */}
@@ -183,7 +194,7 @@ const Dashboard = () => {
                 borderWidth: 2,
               }}
             >
-              🎴 Pull a Card
+              📇 Pull a Card
             </Button>
           </motion.div>
 
