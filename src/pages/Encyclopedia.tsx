@@ -62,15 +62,24 @@ const Encyclopedia: React.FC = () => {
 
   return (
     <Layout>
-      <Box sx={{ textAlign: "center", mb: 5 }}>
-        <Typography
-          variant="h3"
-          fontWeight="bold"
-          color="success.dark"
-          gutterBottom
+      <Box sx={{ textAlign: "center", mb: 5, textShadow: "4px 4px 4px #b9f6ca" }}>
+        <motion.div
+          initial={{ rotate: -1, scale: 1 }}
+          animate={{ rotate: [ -2, 2, -2 ], scale: [1, 1.08, 1] }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+          style={{ display: "inline-block" }}
         >
-          🐞 Your Insect Encyclopedia
-        </Typography>
+          <Typography
+            variant="h3"
+            fontWeight="bold"
+            color="success.dark"
+            gutterBottom
+            sx={{ letterSpacing: 2 }}
+          >
+            🐞 Your Insect Encyclopedia 🦋
+          </Typography>
+        </motion.div>
+
         <Typography variant="subtitle1" color="text.secondary">
           Discover and collect unique insects from all habitats!
         </Typography>
