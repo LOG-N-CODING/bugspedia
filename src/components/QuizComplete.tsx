@@ -1,17 +1,39 @@
 import { Box, Button, Container, Typography } from "@mui/material";
 import { motion } from "framer-motion";
+import { useSearchParams, useNavigate } from "react-router-dom";
+import Confetti from "react-confetti";
+import React, { useEffect, useState } from "react";
 
-const QuizComplete: React.FC<{
-  correctCount: number;
-  totalQuestions: number;
-  attempts: number;
-  onBackHome: () => void;
-}> = ({ correctCount, totalQuestions, attempts, onBackHome }) => {
+const QuizComplete: React.FC = () => {
+  const [params] = useSearchParams();
+  const navigate = useNavigate();
+  const correctCount = Number(params.get("score")) || 0;
+  const totalQuestions = Number(params.get("total")) || 5;
+  const attempts = Number(params.get("attempts")) || 0;
+  const onBackHome = () => navigate("/quiz");
+
+  // 화면 크기 가져오기 (Quiz.tsx와 동일)
+  const [windowSize, setWindowSize] = useState({ width: window.innerWidth, height: window.innerHeight });
+  useEffect(() => {
+    const handleResize = () => setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
-    <Container
+    <>
+      <Confetti
+        width={windowSize.width}
+        height={windowSize.height}
+        numberOfPieces={150}
+        recycle={true}
+        gravity={0.25}
+        initialVelocityY={12}
+      />
+      <Container
       maxWidth="sm"
       sx={{
-        mt: 16,
+        mt: 8,
         textAlign: "center",
         position: "relative",
         overflow: "hidden",
@@ -103,15 +125,16 @@ const QuizComplete: React.FC<{
           textTransform: "none",
           boxShadow: 6,
           "&:hover": {
-            boxShadow: 12,
-            scale: 1.05,
+        boxShadow: 12,
+        scale: 1.05,
           },
         }}
         onClick={onBackHome}
       >
-        Back to Home
+        Retry Quiz
       </Button>
-    </Container>
+      </Container>
+    </>
   );
 };
 

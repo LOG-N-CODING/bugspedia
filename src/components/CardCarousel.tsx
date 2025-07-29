@@ -154,7 +154,16 @@ const CardCarousel = ({
                 )}
 
                 {/* secondary */}
-                <Typography variant="caption" color="text.secondary" lineHeight={0.9} px={1} pb={1} maxHeight={compact ? "57px" : "50%"} overflow="hidden">
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  lineHeight={0.9}
+                  px={1}
+                  pb={1}
+                  maxHeight={compact ? "57px" : "50%"}
+                  overflow="auto"
+                  sx={{ overflowY: "auto", overflowX: "hidden" }}
+                >
                   {card.description || "No description available."}
                 </Typography>
                 {onDeleteCard && (

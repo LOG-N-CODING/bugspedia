@@ -72,7 +72,7 @@ const Leaderboard: React.FC = () => {
 
   return (
     <Layout>
-      <Container maxWidth="md" sx={{ mt: 4, mb: 6 }}>
+      <Container maxWidth="md" sx={{ mt: 0, mb: 6 }}>
         <Typography variant="h3" color="primary" gutterBottom>
           🏆 BugsPedia Leaderboard
         </Typography>

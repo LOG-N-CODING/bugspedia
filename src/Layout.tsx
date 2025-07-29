@@ -16,8 +16,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       style={{
         position: "relative",
         overflow: "hidden",
-        paddingTop: "5rem",
-        paddingBottom: "5rem",
+        paddingTop: "4rem",
+        paddingBottom: "4rem",
         // minHeight: "100vh",
       }}
     >

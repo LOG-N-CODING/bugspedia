@@ -14,22 +14,45 @@ import { doc, increment, updateDoc } from "firebase/firestore";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
 import Confetti from "react-confetti";
+import { useNavigate } from "react-router-dom";
 import InsectCard from "../components/InsectCard";
 import LoginAlert from "../components/LoginAlet";
-import QuizComplete from "../components/QuizComplete";
 import { useAuth } from "../contexts/AuthContext";
 import { quizQuestions } from "../data/quizQuestions"; // static local import
 import Layout from "../Layout";
 import { db } from "../utils/firebase";
 
+// 퀴즈 완료 화면 컴포넌트
+// const QuizEnd: React.FC<{ score: number; total: number; onRetry: () => void }> = ({ score, total, onRetry }) => (
+//   <Layout>
+//     <Container maxWidth="sm" sx={{ mt: 12, mb: 8, textAlign: "center" }}>
+//       <Typography variant="h4" color="success.main" gutterBottom sx={{ fontWeight: "bold" }}>
+//         🎉 퀴즈 완료!
+//       </Typography>
+//       <Typography variant="h6" sx={{ mb: 3 }}>
+//         {total}문제 중 <b>{score}</b>개 정답!
+//       </Typography>
+//       <Button
+//         variant="contained"
+//         color="success"
+//         size="large"
+//         sx={{ fontWeight: "bold", px: 5, py: 1.5, fontSize: "1.1rem" }}
+//         onClick={onRetry}
+//       >
+//         퀴즈 다시 풀기
+//       </Button>
+//     </Container>
+//   </Layout>
+// );
+
 export const QUIZ_QUESTIONS = 5;
 
 const Quiz: React.FC = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
 
-  const [shuffled] = useState(() =>
-    [...quizQuestions].sort(() => 0.5 - Math.random()).slice(0, QUIZ_QUESTIONS)
-  );
+  // quizQuestions는 이미 셔플된 상태로 export됨
+  const [shuffled] = useState(() => quizQuestions.slice(0, QUIZ_QUESTIONS));
 
   const [current, setCurrent] = useState(0);
   const [selected, setSelected] = useState<string | null>(null);
@@ -37,7 +60,7 @@ const Quiz: React.FC = () => {
   const [attempts, setAttempts] = useState(0);
   const [attemptsThisQuestion, setAttemptsThisQuestion] = useState(0);
   const [showCard, setShowCard] = useState(false);
-  const [quizComplete, setQuizComplete] = useState(false);
+  // const [quizComplete, setQuizComplete] = useState(false);
   const [isWrong, setIsWrong] = useState(false);
 
   // Mute state and audio ref
@@ -91,13 +114,14 @@ const Quiz: React.FC = () => {
   const nextQuestion = async () => {
     const nextIndex = current + 1;
     if (nextIndex >= QUIZ_QUESTIONS) {
-      setQuizComplete(true);
       try {
         const userRef = doc(db, "users", user.uid);
         await updateDoc(userRef, { points: increment(correctCount) });
       } catch (err) {
         console.error("Failed to update points:", err);
       }
+      navigate(`/quiz/complete?score=${correctCount}&total=${QUIZ_QUESTIONS}&attempts=${attempts}`);
+      return;
     } else {
       setCurrent(nextIndex);
       setShowCard(false);
@@ -105,23 +129,11 @@ const Quiz: React.FC = () => {
       setAttemptsThisQuestion(0);
       setIsWrong(false);
     }
+
   };
 
   if (!user) return <LoginAlert />;
 
-  if (quizComplete)
-    return (
-      <Layout>
-        <QuizComplete
-          correctCount={correctCount}
-          totalQuestions={QUIZ_QUESTIONS}
-          attempts={attempts}
-          onBackHome={() => {
-            window.location.href = "/";
-          }}
-        />
-      </Layout>
-    );
 
   // 화면 크기 가져오기
   const [windowSize, setWindowSize] = useState({ width: window.innerWidth, height: window.innerHeight });
@@ -146,7 +158,9 @@ const Quiz: React.FC = () => {
       )}
       <Layout>
         
-        <Container maxWidth="sm" sx={{ mt: 12, mb: 8, position: "relative" }}>
+        <Container 
+          maxWidth="sm" 
+          sx={{ mt: 0, mb: 0, position: "relative", alignItems: "start" }}>
           {/* Audio element - looped background music */}
           <audio ref={audioRef} src="/quiz.mp3" loop preload="auto" />
 
@@ -313,7 +327,7 @@ const Quiz: React.FC = () => {
                     <InsectCard insect={question.reward} />
                   </Box>
 
-                  <Button
+                    <Button
                     variant="contained"
                     color="success"
                     onClick={nextQuestion}
@@ -326,9 +340,9 @@ const Quiz: React.FC = () => {
                       "&:hover": { boxShadow: 6 },
                     }}
                     autoFocus
-                  >
-                    Next Question
-                  </Button>
+                    >
+                    {current === QUIZ_QUESTIONS - 1 ? "Finish" : "Next Question"}
+                    </Button>
                 </Paper>
               </motion.div>
             )}

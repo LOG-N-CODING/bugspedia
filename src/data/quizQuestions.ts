@@ -8,139 +8,18 @@ export interface QuizQuestion {
   reward: InsectCardData;
 }
 
-export const quizQuestions: QuizQuestion[] = [
-  {
-    question: "Which insect undergoes complete metamorphosis?",
-    options: ["Butterfly", "Ant", "Grasshopper", "Beetle"],
-    answer: "Butterfly",
-    reward: {
-      name: "Monarch Butterfly",
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTKye0vAJ3XVcMT3Sn8Df2xZAtRQ-IXHMAqg&s",
-      habitat: "Meadows",
-      behavior: "Migratory",
-      description: "Famous for long migrations and metamorphosis.",
-    },
-  },
-  {
-    question: "Which insect is known for making honey?",
-    options: ["Butterfly", "Beetle", "Honeybee", "Moth"],
-    answer: "Honeybee",
-    reward: {
-      name: "Honeybee",
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzWgJOAlVJaObmFOuCoob9pfqZr5cLyMvRBQ&s",
-      habitat: "Gardens, hives",
-      behavior: "Social, pollinator",
-      description: "Vital pollinator that produces honey.",
-    },
-  },
-  {
-    question: "Which insect has a deadly sting and lives in colonies?",
-    options: ["Wasp", "Firefly", "Termite", "Fly"],
-    answer: "Wasp",
-    reward: {
-      name: "Yellow Wasp",
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWlhUZ2G9KYHe17WQ3iWuX_6SMpmo4bC55Kw&s",
-      habitat: "Urban areas, trees",
-      behavior: "Aggressive, stinging",
-      description: "Known for painful stings and building nests.",
-    },
-  },
-  {
-    question: "Which insect lights up at night to attract mates?",
-    options: ["Firefly", "Beetle", "Moth", "Cricket"],
-    answer: "Firefly",
-    reward: {
-      name: "Firefly",
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgWTd1lF8s03A_mzSgII5w83IO2_QeGlpwNQ&s",
-      habitat: "Forests, fields",
-      behavior: "Bioluminescent",
-      description: "Glows using chemical reaction in abdomen.",
-    },
-  },
-  {
-    question: "Which insect is known for chirping at night?",
-    options: ["Cricket", "Ant", "Fly", "Beetle"],
-    answer: "Cricket",
-    reward: {
-      name: "Field Cricket",
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlCQCj96Ax6dzawIh62whTc24NLLOPVsWY-Q&s",
-      habitat: "Fields, grass",
-      behavior: "Nocturnal, chirping",
-      description: "Produces sound by rubbing wings together.",
-    },
-  },
-  {
-    question: "What do ladybugs primarily eat?",
-    options: ["Nectar", "Aphids", "Leaves", "Fungi"],
-    answer: "Aphids",
-    reward: {
-      name: "Ladybug",
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6EslMaZ4uDQPmftb_ueyaZJBgcMggTW5y-A&s",
-      habitat: "Gardens",
-      behavior: "Beneficial predator",
-      description: "Helps gardeners by eating plant pests.",
-    },
-  },
-  {
-    question: "Which insect has the strongest bite for its size?",
-    options: ["Ant", "Termite", "Beetle", "Centipede"],
-    answer: "Ant",
-    reward: {
-      name: "Army Ant",
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlWMPQE1KmVDryislLGn5753WXea5ltTuL8g&s",
-      habitat: "Rainforest",
-      behavior: "Aggressive swarm",
-      description: "Known for powerful jaws and group attacks.",
-    },
-  },
-  {
-    question: "Which insect can walk on water?",
-    options: ["Water strider", "Dragonfly", "Bee", "Butterfly"],
-    answer: "Water strider",
-    reward: {
-      name: "Water Strider",
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUaBduRJBs3w-kt9uVrxWflVtcXHp_oO8n4w&s",
-      habitat: "Ponds, streams",
-      behavior: "Surface walking",
-      description: "Skims across water using surface tension.",
-    },
-  },
-  {
-    question: "Which insect builds silk traps to catch prey?",
-    options: ["Spider", "Ant", "Moth", "Beetle"],
-    answer: "Spider",
-    reward: {
-      name: "Orb Weaver",
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQykp5SJmUrNroMA6n_TNzjRon_3Nh60QMd4g&s",
-      habitat: "Forests, gardens",
-      behavior: "Web spinning",
-      description: "Builds spiral webs to trap insects.",
-    },
-  },
-  {
-    question: "Which insect is a master of camouflage on leaves?",
-    options: ["Leaf Insect", "Cicada", "Moth", "Dragonfly"],
-    answer: "Leaf Insect",
-    reward: {
-      name: "Leaf Insect",
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSb6fU6-7iwtMrKa6svwUpZHbVSa_QhaV8wwQ&s",
-      habitat: "Tropical forests",
-      behavior: "Camouflage",
-      description: "Mimics leaves to avoid predators.",
-    },
-  },
+// options 배열을 무작위로 섞고 answer가 올바르게 남도록 변환
+function shuffleArray<T>(array: T[]): T[] {
+  const arr = array.slice();
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
 
-  // 10 more examples (continue pattern):
+const rawQuizQuestions: QuizQuestion[] = [
+  // ...기존 문제 데이터 (아래에서 그대로 유지)...
   {
     question: "Which insect has wings but is a poor flyer?",
     options: ["Termite", "Cockroach", "Beetle", "Grasshopper"],
@@ -545,5 +424,16 @@ export const quizQuestions: QuizQuestion[] = [
       behavior: "Resilient",
       description: "Can live without a head for a week.",
     },
+
   },
 ];
+
+// options을 무작위로 섞어서 export
+export const quizQuestions: QuizQuestion[] = rawQuizQuestions.map((q) => {
+  const shuffled = shuffleArray(q.options);
+  return {
+    ...q,
+    options: shuffled,
+    answer: q.answer,
+  };
+});

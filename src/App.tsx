@@ -13,6 +13,7 @@ import Quiz from "./pages/Quiz";
 import QuizStart from "./pages/QuizStart";
 import Signup from "./pages/Signup";
 import { theme } from "./theme";
+import QuizComplete from "./components/QuizComplete";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
               <Route path="/signup" element={<Signup />} />
               <Route path="/quiz" element={<QuizStart />} />
               <Route path="/quiz/play" element={<Quiz />} />
+              <Route path="/quiz/complete" element={<QuizComplete />} />
               <Route path="/encyclopedia" element={<Encyclopedia />} />
               <Route path="/leaderboard" element={<Leaderboard />} />
             </Routes>

@@ -85,7 +85,7 @@ const Dashboard = () => {
               </Typography>
             </Box>
             <Typography variant="body1" color="text.secondary">
-              {user.displayName}님, 곤충 도감에 오신 것을 환영합니다!
+              Welcome, {user.displayName}! Glad to have you in the insect encyclopedia!
             </Typography>
           </motion.div>
         </Box>

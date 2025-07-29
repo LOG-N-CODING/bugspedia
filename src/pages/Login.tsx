@@ -39,7 +39,7 @@ const Login: React.FC = () => {
           elevation={6}
           sx={{
             p: 5,
-            mt: 10,
+            mt: 0,
             borderRadius: 4,
 
             transition: "transform 0.3s ease",

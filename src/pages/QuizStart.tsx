@@ -11,11 +11,9 @@ const QuizStart: React.FC = () => {
     <Layout>
       <Box
         sx={{
-          minHeight: "70vh",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          p: 3,
           borderRadius: 4,
         }}
       >
