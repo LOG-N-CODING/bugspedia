@@ -51,8 +51,16 @@ const Quiz: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  // quizQuestions는 이미 셔플된 상태로 export됨
-  const [shuffled] = useState(() => quizQuestions.slice(0, QUIZ_QUESTIONS));
+  // 퀴즈 문제 5개를 랜덤하게 선택 (매번 다르게)
+  const [shuffled] = useState(() => {
+    const allQuestions = [...quizQuestions];
+    // Fisher-Yates 셔플 알고리즘으로 완전 랜덤
+    for (let i = allQuestions.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [allQuestions[i], allQuestions[j]] = [allQuestions[j], allQuestions[i]];
+    }
+    return allQuestions.slice(0, QUIZ_QUESTIONS);
+  });
 
   const [current, setCurrent] = useState(0);
   const [selected, setSelected] = useState<string | null>(null);
@@ -62,6 +70,41 @@ const Quiz: React.FC = () => {
   const [showCard, setShowCard] = useState(false);
   // const [quizComplete, setQuizComplete] = useState(false);
   const [isWrong, setIsWrong] = useState(false);
+
+  // 슬롯머신 효과용 상태
+  const [isShuffling, setIsShuffling] = useState(true);
+  const [displayQuestion, setDisplayQuestion] = useState(shuffled[0]?.question || "");
+  const shuffleIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  // 슬롯머신 효과 시작
+  useEffect(() => {
+    if (isShuffling) {
+      shuffleIntervalRef.current = setInterval(() => {
+        const randomQuestion = quizQuestions[Math.floor(Math.random() * quizQuestions.length)];
+        setDisplayQuestion(randomQuestion.question);
+      }, 100); // 100ms마다 문제 변경
+
+      // 3초 후 멈춤
+      setTimeout(() => {
+        if (shuffleIntervalRef.current) {
+          clearInterval(shuffleIntervalRef.current);
+        }
+        setDisplayQuestion(shuffled[current]?.question || "");
+        setIsShuffling(false);
+      }, 3000);
+    }
+
+    return () => {
+      if (shuffleIntervalRef.current) {
+        clearInterval(shuffleIntervalRef.current);
+      }
+    };
+  }, [isShuffling, current, shuffled]);
+
+  // 다음 문제로 넘어갈 때도 슬롯머신 효과
+  const startShuffleEffect = () => {
+    setIsShuffling(true);
+  };
 
   // Mute state and audio ref
   const [isMuted, setIsMuted] = useState(true);
@@ -128,6 +171,7 @@ const Quiz: React.FC = () => {
       setSelected(null);
       setAttemptsThisQuestion(0);
       setIsWrong(false);
+      startShuffleEffect(); // 다음 문제로 넘어갈 때 슬롯머신 효과
     }
 
   };
@@ -177,6 +221,17 @@ const Quiz: React.FC = () => {
 
           {/* Progress Bar */}
           <Box sx={{ mb: 3 }}>
+            {isShuffling && (
+              <Typography
+                variant="body2"
+                color="orange"
+                align="center"
+                mb={1}
+                sx={{ fontWeight: "bold" }}
+              >
+                🎰 문제를 선택하는 중...
+              </Typography>
+            )}
             <LinearProgress
               variant="determinate"
               value={((current + (showCard ? 1 : 0)) / QUIZ_QUESTIONS) * 100}
@@ -216,9 +271,25 @@ const Quiz: React.FC = () => {
                     variant="h6"
                     gutterBottom
                     mb={4}
-                    sx={{ fontWeight: "600" }}
+                    sx={{ 
+                      fontWeight: "600",
+                      minHeight: "60px", // 높이 고정으로 깜빡임 방지
+                      display: "flex",
+                      alignItems: "center"
+                    }}
                   >
-                    {current + 1}. {question.question}
+                    <motion.span
+                      key={isShuffling ? "shuffling" : current}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.3 }}
+                      style={{
+                        color: isShuffling ? "#ff9800" : "inherit", // 셔플 중일 때 주황색
+                        fontWeight: isShuffling ? "bold" : "600"
+                      }}
+                    >
+                      {current + 1}. {isShuffling ? displayQuestion : question.question}
+                    </motion.span>
                   </Typography>
                   <Stack spacing={2}>
                     {question.options.map((option) => {
@@ -242,7 +313,7 @@ const Quiz: React.FC = () => {
                               : "success"
                           }
                           onClick={() => handleAnswer(option)}
-                          disabled={!!selected && !isWrong}
+                          disabled={isShuffling || (!!selected && !isWrong)} // 셔플링 중에도 비활성화
                           sx={{
                             textTransform: "none",
                             fontWeight: "600",
@@ -250,8 +321,9 @@ const Quiz: React.FC = () => {
                             py: 1.5,
                             borderWidth: 2,
                             transition: "all 0.3s",
+                            opacity: isShuffling ? 0.5 : 1, // 셔플링 중 반투명
                             "&:hover": {
-                              scale: 1.05,
+                              scale: isShuffling ? 1 : 1.05, // 셔플링 중 호버 효과 비활성화
                               bgcolor: isSelected
                                 ? isCorrect
                                   ? "success.dark"
