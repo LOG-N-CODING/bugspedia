@@ -700,7 +700,7 @@ export const sampleInsects: InsectCardData[] = [
     name: "Zebra Swallowtail Butterfly",
     image:
       // "https://upload.wikimedia.org/wikipedia/commons/e/e5/Zebra_Swallowtail%2C_Megan_McCarty69.jpg",
-      "/insects/imgi_59_Zebra_Swallowtail%2C_Megan_McCarty69.jpg",
+      "/insects/imgi_59_Zebra_Swallowtai.jpg",
     habitat: "Woodlands and river edges",
     behavior: "Flies swiftly, feeds on nectar",
     description:
