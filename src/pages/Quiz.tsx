@@ -222,15 +222,15 @@ const Quiz: React.FC = () => {
           {/* Progress Bar */}
           <Box sx={{ mb: 3 }}>
             {isShuffling && (
-              <Typography
+                <Typography
                 variant="body2"
                 color="orange"
                 align="center"
                 mb={1}
                 sx={{ fontWeight: "bold" }}
-              >
-                🎰 문제를 선택하는 중...
-              </Typography>
+                >
+                🎰 Selecting a question...
+                </Typography>
             )}
             <LinearProgress
               variant="determinate"
